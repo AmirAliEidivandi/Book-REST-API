@@ -1,9 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const Book = require("../models/books.models");
+const { Book, validateBook } = require("../models/books.models");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
+    const error = await validateBook(req.body);
+    if (error.message) res.status(400).send(error.message);
+
     const book = new Book({
         name: req.body.bookName,
         author: {
