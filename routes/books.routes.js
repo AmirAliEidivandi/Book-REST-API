@@ -17,8 +17,18 @@ router.post("/", async (req, res) => {
     });
 
     book.save()
-        .then((book) => res.send(book))
+        .then((book) => res.status(201).send(book))
         .catch(() => res.status(500).send("Book was not stored in db"));
+});
+
+// GET ALL BOOKS
+router.get("/", async (req, res) => {
+    try {
+        const books = await Book.find({});
+        res.status(200).json(books);
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
 });
 
 module.exports = router;
